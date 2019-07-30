@@ -1,0 +1,56 @@
+{
+  "name": "loganstellway-wp-gutenberg-bootstrap-blocks",
+  "version": "1.0.0",
+  "description": "Bootstrap blocks for Gutenberg",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "NODE_ENV=development wp-scripts build",
+    "build:prod": "NODE_ENV=production wp-scripts build",
+    "start": "wp-scripts start",
+    "lint:scripts": "wp-scripts lint-js ./src",
+    "lint:styles": "wp-scripts lint-style './src/**/*.scss'",
+    "typecheck": "tsc"
+  },
+  "keywords": [
+    "gutenberg",
+    "bootstrap",
+    "blocks"
+  ],
+  "author": "Logan Stellway",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "@types/google-map-react": "^0.23.12",
+    "@types/wordpress__block-editor": "^2.2.1",
+    "@types/wordpress__components": "^7.4.4",
+    "@types/wordpress__compose": "^3.4.0",
+    "@types/wordpress__data": "^4.6.2",
+    "@types/wordpress__editor": "^9.4.0",
+    "@types/wordpress__element": "^2.4.0",
+    "@types/wordpress__hooks": "^2.4.0",
+    "@types/wordpress__i18n": "^3.4.0",
+    "@wordpress/block-editor": "^2.0.0",
+    "@wordpress/components": "^7.3.0",
+    "@wordpress/compose": "^3.2.0",
+    "@wordpress/data": "^4.4.0",
+    "@wordpress/editor": "^9.4.0",
+    "@wordpress/element": "^2.3.0",
+    "@wordpress/hooks": "^2.2.0",
+    "@wordpress/i18n": "^3.3.0",
+    "@wordpress/scripts": "^3.1.0",
+    "autoprefixer": "^9.5.1",
+    "classnames": "^2.2.6",
+    "css-loader": "^2.1.1",
+    "cssnano": "^4.1.10",
+    "memize": "^1.0.5",
+    "mini-css-extract-plugin": "^0.6.0",
+    "node-sass": "^4.12.0",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.30.0"
+  },
+  "dependencies": {
+    "google-map-react": "^1.1.4"
+  }
+}
