@@ -11,7 +11,8 @@ import { Fragment } from "@wordpress/element";
 /**
  * Internal dependencies
  */
-import { getCenter, getRatio, Marker } from "./blocks/google-map/utils";
+import { getRatio } from "./blocks/aspect-ratio/utils";
+import { getCenter, Marker } from "./blocks/google-map/utils";
 
 (() => {
   // Google Map
@@ -19,9 +20,28 @@ import { getCenter, getRatio, Marker } from "./blocks/google-map/utils";
     document.querySelectorAll("script.wp-block-loganstellway-google-map"),
     map => {
       const attributes = JSON.parse(map.innerHTML);
-      const { apiKey, x, y, lat, lng, zoom, markers, minHeight } = attributes;
+      const {
+        apiKey,
+        x,
+        y,
+        lat,
+        lng,
+        zoom,
+        markers,
+        minHeight,
+        mapOptions
+      } = attributes;
 
-      if (apiKey && x && y && lat && lng && zoom && markers && markers.length) {
+      if (
+        apiKey &&
+        x &&
+        y &&
+        lat &&
+        lng &&
+        zoom &&
+        markers &&
+        typeof markers.length != "undefined"
+      ) {
         const content = (
           <Fragment>
             <div
@@ -30,10 +50,11 @@ import { getCenter, getRatio, Marker } from "./blocks/google-map/utils";
                 minHeight: minHeight
               }}
             />
-            <div className="map-container">
+            <div className="loganstellway-aspect-ratio-content">
               <GoogleMapReact
-                defaultCenter={getCenter(attributes)}
-                defaultZoom={zoom}
+                center={getCenter(attributes)}
+                zoom={zoom}
+                options={mapOptions}
                 bootstrapURLKeys={{ key: apiKey }}
               >
                 {markers.map((marker, index) => {
@@ -54,7 +75,7 @@ import { getCenter, getRatio, Marker } from "./blocks/google-map/utils";
         );
 
         const el = document.createElement("div");
-        el.className = map.className;
+        el.className = `${map.className} loganstellway-aspect-ratio-container`;
         map.parentNode.replaceChild(el, map);
         ReactDOM.render(content, el);
       }

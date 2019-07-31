@@ -1,0 +1,18 @@
+.editor-panel-map-settings {
+  .components-panel__row {
+    align-items: start;
+
+    > .components-base-control {
+      padding-right: 5px;
+      margin-bottom: 0;
+
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+  }
+
+  .mb-0 {
+    margin-bottom: 0;
+  }
+}

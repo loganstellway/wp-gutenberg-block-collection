@@ -38,7 +38,8 @@ import { PanelBody, PanelRow, BaseControl, TextControl, TextareaControl, Button,
 /**
  * Internal dependencies
  */
-import { getRatio, getCenter, Marker, MapIcon } from "./utils";
+import { getRatio } from "../aspect-ratio/utils";
+import { getCenter, Marker, MapIcon } from "./utils";
 /**
  * Map edit
  */
@@ -71,7 +72,6 @@ var GoogleMapEdit = /** @class */ (function (_super) {
         this.didMount = true;
     };
     // Set component state
-    // Wrapper for state to allow setting state before component is mounted
     GoogleMapEdit.prototype.setComponentState = function (data) {
         if (this.didMount) {
             this.setState(data);
@@ -79,6 +79,12 @@ var GoogleMapEdit = /** @class */ (function (_super) {
         else {
             this.state = __assign({}, this.state, data);
         }
+    };
+    // Set map options
+    GoogleMapEdit.prototype.setMapOptions = function (updates) {
+        var _a = this.props, attributes = _a.attributes, setAttributes = _a.setAttributes;
+        var update = __assign({}, attributes.mapOptions, updates);
+        setAttributes({ mapOptions: update });
     };
     // Geocode address
     GoogleMapEdit.prototype.geocode = function (request, callback) {
@@ -157,10 +163,6 @@ var GoogleMapEdit = /** @class */ (function (_super) {
                                 mapClient: createClient({ key: val })
                             });
                         } }),
-                    React.createElement(RangeControl, { label: __("Zoom"), value: zoom, min: 1, max: 20, onChange: function (val) {
-                            setAttributes({ zoom: val });
-                            _this.setComponentState({ zoom: val });
-                        } }),
                     React.createElement(TextControl, { label: __("Address"), value: address, onChange: function (val) {
                             setAttributes({ address: val });
                             _this.geocode({ address: val }, function (error, resp) {
@@ -180,7 +182,35 @@ var GoogleMapEdit = /** @class */ (function (_super) {
                             React.createElement(TextControl, { label: React.createElement("small", null, __("Longitude")), value: lng, onChange: function (val) {
                                     setAttributes({ lng: parseFloat(val) });
                                     _this.setComponentState({ lng: parseFloat(val) });
-                                } })))),
+                                } }))),
+                    React.createElement(RangeControl, { label: __("Zoom"), value: zoom, min: 1, max: 20, onChange: function (val) {
+                            setAttributes({ zoom: val });
+                            _this.setComponentState({ zoom: val });
+                        } }),
+                    React.createElement(ToggleControl, { label: __("Fullscreen Control"), checked: attributes.mapOptions.fullscreenControl, onChange: function (val) {
+                            return _this.setMapOptions({ fullscreenControl: val });
+                        } }),
+                    React.createElement(ToggleControl, { label: __("Map Type Control"), checked: attributes.mapOptions.mapTypeControl, onChange: function (val) {
+                            return _this.setMapOptions({ mapTypeControl: val });
+                        } }),
+                    React.createElement(ToggleControl, { label: __("Street View Control"), checked: attributes.mapOptions.streetViewControl, onChange: function (val) {
+                            return _this.setMapOptions({ streetViewControl: val });
+                        } }),
+                    React.createElement(ToggleControl, { label: __("Zoom Control"), checked: attributes.mapOptions.zoomControl, onChange: function (val) {
+                            return _this.setMapOptions({ zoomControl: val });
+                        } }),
+                    React.createElement(SelectControl, { label: __("Map Type"), value: attributes.mapOptions.mapTypeId, onChange: function (val) { return _this.setMapOptions({ mapTypeId: val }); }, options: [
+                            { value: "roadmap", label: "Road Map" },
+                            { value: "satellite", label: "Satellite" }
+                        ] }),
+                    React.createElement(TextareaControl, { label: __("Styles"), help: React.createElement("p", null,
+                            "Refer to",
+                            " ",
+                            React.createElement("a", { href: "https://snazzymaps.com/", ref: "noopener noreferrer", target: "_blank" }, "SnazzyMaps"),
+                            " ",
+                            "for a library of styles."), value: JSON.stringify(attributes.mapOptions.styles), onChange: function (val) {
+                            return _this.setMapOptions({ styles: JSON.parse(val) });
+                        } })),
                 React.createElement(PanelBody, { className: "editor-panel-map-settings", title: __("Dimensions"), initialOpen: false },
                     React.createElement(BaseControl, { id: "ratio", label: __("Ratio") },
                         React.createElement(PanelRow, null,
@@ -264,15 +294,16 @@ var GoogleMapEdit = /** @class */ (function (_super) {
                     }),
                     React.createElement(Button, { isSmall: true, isPrimary: true, onClick: this.addMarker }, __("Add Marker")))),
             !apiKey && (React.createElement(Placeholder, { icon: MapIcon, label: __("Add API Key in block settings.") })),
-            apiKey && (React.createElement("div", { className: className },
+            apiKey && (lat == 0 && lng == 0) && (React.createElement(Placeholder, { icon: MapIcon, label: __("Add location data in block settings.") })),
+            apiKey && !(lat == 0 && lng == 0) && (React.createElement("div", { className: className + " loganstellway-aspect-ratio-container" },
                 React.createElement("div", { style: {
                         paddingTop: getRatio(x, y) + "%",
                         minHeight: addMinHeight
                             ? "" + minHeight + minHeightUnit
                             : undefined
                     } }),
-                React.createElement("div", { className: "map-container" },
-                    React.createElement(GoogleMapReact, { bootstrapURLKeys: { key: apiKey }, center: getCenter(this.state), zoom: this.state.zoom, options: this.createMapOptions() }, markers.map(function (_a, index) {
+                React.createElement("div", { className: "loganstellway-aspect-ratio-content" },
+                    React.createElement(GoogleMapReact, { bootstrapURLKeys: { key: apiKey }, center: getCenter(this.state), zoom: this.state.zoom, options: attributes.mapOptions }, markers.map(function (_a, index) {
                         var lat = _a.lat, lng = _a.lng, description = _a.description;
                         return (React.createElement(Marker, { key: index, lat: lat, lng: lng, description: description || undefined }));
                     })))))));

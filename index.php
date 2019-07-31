@@ -20,14 +20,13 @@ if ( ! class_exists('\LoganStellway\Gutenberg\Blocks') ) {
     class Blocks
     {
         public function __construct() {
-            add_action( 'init', array( $this, 'registerBlock' ) );
+            add_action( 'init', array( $this, 'register' ) );
         }
 
         /**
-         * Initialize 
+         * Register assets
          */
-        public function registerBlock()
-        {
+        public function register() {
             /**
              * Register editor assets
              */
@@ -63,10 +62,16 @@ if ( ! class_exists('\LoganStellway\Gutenberg\Blocks') ) {
                 array( 'wp-edit-blocks' ),
                 filemtime( plugin_dir_path( __FILE__ ) . 'dist/client-styles.css' )
             );
-        
-            /**
-             * Register block
-             */
+
+            $this->registerBlocks();
+        }
+
+        /**
+         * Initialize 
+         */
+        public function registerBlocks()
+        {
+            // Google map
             register_block_type( 'loganstellway/google-maps', array(
                 'style' => 'loganstellway-gutenberg-blocks-client',
                 'script' => 'loganstellway-gutenberg-blocks-client',

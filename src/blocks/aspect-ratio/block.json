@@ -1,0 +1,62 @@
+{
+  "name": "loganstellway/aspect-ratio",
+  "category": "embed",
+  "attributes": {
+    "x": {
+      "type": "number",
+      "default": 2
+    },
+    "y": {
+      "type": "number",
+      "default": 1
+    },
+    "minHeight": {
+      "type": "number",
+      "default": 100
+    },
+    "addMinHeight": {
+      "type": "boolean",
+      "default": false
+    },
+    "minHeightUnit": {
+      "type": "string",
+      "default": "px"
+    },
+    "justifyContent": {
+      "type": "string",
+      "default": "normal"
+    },
+    "alignItems": {
+      "type": "string",
+      "default": "normal"
+    },
+    "addBgColor": {
+      "type": "boolean",
+      "default": false
+    },
+    "bgColor": {
+      "type": "object",
+      "default": {
+        "hex": "transparent"
+      }
+    },
+    "addMaskColor": {
+      "type": "boolean",
+      "default": false
+    },
+    "maskColor": {
+      "type": "object",
+      "default": {
+        "hex": "transparent"
+      }
+    },
+    "bgImage": {
+      "type": "object",
+      "default": {}
+    },
+    "bgPosition": {
+      "type": "string",
+      "default": "50% 50%"
+    }
+  }
+}

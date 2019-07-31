@@ -50,6 +50,17 @@
           "description": ""
         }
       ]
+    },
+    "mapOptions": {
+      "type": "object",
+      "default": {
+        "fullscreenControl": false,
+        "mapTypeId": "roadmap",
+        "mapTypeControl": false,
+        "streetViewControl": false,
+        "styles": [],
+        "zoomControl": false
+      }
     }
   }
 }

@@ -2,16 +2,12 @@
  * External Dependencies
  */
 import React from "react";
-
-/**
- * Get ratio
- */
-export const getRatio = (x: number, y: number) => (y / x) * 100;
+import { Coords, MapOptions, MapTypeStyle } from "google-map-react";
 
 /**
  * Get center
  */
-export const getCenter = ({ lat, lng }: { lat: number; lng: number }) => ({
+export const getCenter = ({ lat, lng }: Coords) => ({
   lat,
   lng
 });
@@ -28,20 +24,18 @@ export const MapIcon = (
   </svg>
 );
 
-const MarkerComponent = () => {};
+/**
+ * Marker interface
+ */
+export interface MarkerInterface extends Coords {
+  description?: string;
+  address?: string;
+}
 
 /**
  * Map marker
  */
-export const Marker = ({
-  lat,
-  lng,
-  description
-}: {
-  lat: number;
-  lng: number;
-  description?: string;
-}) =>
+export const Marker = ({ lat, lng, description }: MarkerInterface) =>
   lat &&
   lng && (
     <div className="loganstellway-google-map--marker">
@@ -54,3 +48,19 @@ export const Marker = ({
       {description && <div className="description">{description}</div>}
     </div>
   );
+
+/**
+ * Attributes interface
+ */
+export interface GoogleMapsAttributes extends Coords {
+  apiKey: string;
+  zoom: number;
+  x: number;
+  y: number;
+  minHeight: number;
+  addMinHeight: boolean;
+  minHeightUnit: string;
+  address: string;
+  markers: MarkerInterface[];
+  mapOptions: Partial<MapOptions>;
+}

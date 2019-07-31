@@ -7,11 +7,25 @@ import React from "react";
  * WordPress dependencies
  */
 import { Component } from "@wordpress/element";
+import { BlockSaveProps } from "@wordpress/blocks";
+
+/**
+ * Internal dependencies
+ */
+import { GoogleMapsAttributes } from "./utils";
+
+interface Props extends BlockSaveProps<GoogleMapsAttributes> {
+  className: string;
+}
 
 /**
  * Save
  */
 export default class GoogleMapSave extends Component {
+  // Props
+  props: Props;
+
+  // Render
   render() {
     // Props
     const { attributes, className } = this.props;
@@ -27,7 +41,8 @@ export default class GoogleMapSave extends Component {
       markers,
       minHeight,
       addMinHeight,
-      minHeightUnit
+      minHeightUnit,
+      mapOptions
     } = attributes;
 
     return (
@@ -44,7 +59,10 @@ export default class GoogleMapSave extends Component {
             lat,
             lng,
             markers,
-            minHeight: addMinHeight ? `${minHeight}${minHeightUnit}` : undefined
+            minHeight: addMinHeight
+              ? `${minHeight}${minHeightUnit}`
+              : undefined,
+            mapOptions
           })}
         </script>
       )

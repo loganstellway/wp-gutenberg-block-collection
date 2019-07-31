@@ -32,7 +32,7 @@ var GoogleMapSave = /** @class */ (function (_super) {
         // Props
         var _a = this.props, attributes = _a.attributes, className = _a.className;
         // Attributes
-        var apiKey = attributes.apiKey, zoom = attributes.zoom, x = attributes.x, y = attributes.y, lat = attributes.lat, lng = attributes.lng, markers = attributes.markers, minHeight = attributes.minHeight, addMinHeight = attributes.addMinHeight, minHeightUnit = attributes.minHeightUnit;
+        var apiKey = attributes.apiKey, zoom = attributes.zoom, x = attributes.x, y = attributes.y, lat = attributes.lat, lng = attributes.lng, markers = attributes.markers, minHeight = attributes.minHeight, addMinHeight = attributes.addMinHeight, minHeightUnit = attributes.minHeightUnit, mapOptions = attributes.mapOptions;
         return (apiKey && (React.createElement("script", { type: "text/wp-block-loganstellway-google-map", className: className }, JSON.stringify({
             apiKey: apiKey,
             zoom: zoom,
@@ -41,7 +41,10 @@ var GoogleMapSave = /** @class */ (function (_super) {
             lat: lat,
             lng: lng,
             markers: markers,
-            minHeight: addMinHeight ? "" + minHeight + minHeightUnit : undefined
+            minHeight: addMinHeight
+                ? "" + minHeight + minHeightUnit
+                : undefined,
+            mapOptions: mapOptions
         }))));
     };
     return GoogleMapSave;

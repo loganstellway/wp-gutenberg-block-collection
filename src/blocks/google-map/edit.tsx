@@ -2,7 +2,20 @@
  * External dependencies
  */
 import React from "react";
-import GoogleMapReact from "google-map-react";
+import GoogleMapReact, {
+  MapOptions,
+  Coords,
+  MapTypeStyle
+} from "google-map-react";
+import { BlockEditProps } from "@wordpress/blocks";
+import {
+  GoogleMapsClient,
+  createClient,
+  GeocodingRequest,
+  GeocodingResponse,
+  ResponseCallback,
+  GeocodingResult
+} from "@google/maps";
 
 /**
  * WordPress dependencies
@@ -26,37 +39,51 @@ import {
 /**
  * Internal dependencies
  */
-import { getRatio, getCenter, Marker, MapIcon } from "./utils";
+import { getRatio } from "../aspect-ratio/utils";
+import {
+  getCenter,
+  Marker,
+  MarkerInterface,
+  MapIcon,
+  GoogleMapsAttributes
+} from "./utils";
 
 /**
- * Marker interface
+ * State interface
  */
-interface MarkerInterface {
-  description: string;
-  address: string;
-  lat: number;
-  lng: number;
+interface State extends Coords {
+  mapClient: GoogleMapsClient;
+  geocoder?: {};
+  timer?: ReturnType<typeof setTimeout>;
+  timeout: number;
+  zoom: number;
 }
 
 /**
  * Map edit
  */
 class GoogleMapEdit extends Component {
+  // Did mount
+  didMount: boolean = false;
+
+  // Props
+  props: BlockEditProps<GoogleMapsAttributes>;
+
+  // State
+  state: State = {
+    mapClient: createClient({ key: this.props.attributes.apiKey }),
+    geocoder: false,
+    timeout: 1000,
+    lat: this.props.attributes.lat,
+    lng: this.props.attributes.lng,
+    zoom: this.props.attributes.zoom
+  };
+
   // Constructor
-  constructor(props) {
+  constructor(props: BlockEditProps<GoogleMapsAttributes>) {
     super(props);
 
-    this.state = {
-      api: {},
-      geocoder: false,
-      timer: 0,
-      timeout: 1000
-    };
-
-    this.setApi = this.setApi.bind(this);
-    this.center = this.center.bind(this);
-    this.zoom = this.zoom.bind(this);
-    this.getGeocoder = this.getGeocoder.bind(this);
+    this.setComponentState = this.setComponentState.bind(this);
     this.geocode = this.geocode.bind(this);
     this.getCenterFromGeocoder = this.getCenterFromGeocoder.bind(this);
     this.updateMarker = this.updateMarker.bind(this);
@@ -64,61 +91,54 @@ class GoogleMapEdit extends Component {
     this.addMarker = this.addMarker.bind(this);
   }
 
-  // Set API
-  setApi(api) {
-    this.setState({ api });
+  // Component did mount
+  componentDidMount() {
+    this.didMount = true;
   }
 
-  // Update center
-  center() {
-    const { attributes } = this.props;
-    const { map } = this.state.api;
-
-    if (map && map.setCenter) {
-      map.setCenter(getCenter(attributes));
+  // Set component state
+  setComponentState(data: Partial<State>) {
+    if (this.didMount) {
+      this.setState(data);
+    } else {
+      this.state = {
+        ...this.state,
+        ...data
+      };
     }
   }
 
-  // Update zoom
-  zoom() {
-    const { attributes } = this.props;
-    const { zoom } = attributes;
-    const { map } = this.state.api;
+  // Set map options
+  setMapOptions(updates: Partial<MapOptions>) {
+    const { attributes, setAttributes } = this.props;
+    const update = {
+      ...attributes.mapOptions,
+      ...updates
+    };
 
-    if (map && map.setZoom) {
-      map.setZoom(zoom);
-    }
-  }
-
-  // Get geocoder
-  getGeocoder() {
-    if (!this.state.geocoder) {
-      const { maps } = this.state.api;
-
-      if (maps && maps.Geocoder) {
-        this.setState({ geocoder: new maps.Geocoder() });
-      }
-    }
-    return this.state.geocoder;
+    setAttributes({ mapOptions: update });
   }
 
   // Geocode address
-  geocode(address: string, callback: (results, status) => void) {
-    if (address.trim() && this.getGeocoder()) {
+  geocode(
+    request: GeocodingRequest,
+    callback: ResponseCallback<GeocodingResponse>
+  ) {
+    if (this.props.attributes.apiKey) {
       // Cancel previous request
       clearTimeout(this.state.timer);
 
       // Start new request
-      this.setState({
+      this.setComponentState({
         timer: setTimeout(() => {
-          this.getGeocoder().geocode({ address }, callback);
+          this.state.mapClient.geocode(request, callback);
         }, this.state.timeout)
       });
     }
   }
 
   // Get center from
-  getCenterFromGeocoder(data) {
+  getCenterFromGeocoder(data: GeocodingResult[]) {
     let center = { lat: 0, lng: 0 };
 
     try {
@@ -126,7 +146,7 @@ class GoogleMapEdit extends Component {
         const { geometry } = result;
         const { location } = geometry;
         const { lat, lng } = location;
-        center = { lat: lat(), lng: lng() };
+        center = { lat: lat, lng: lng };
       });
     } catch (error) {}
 
@@ -204,16 +224,11 @@ class GoogleMapEdit extends Component {
             <TextControl
               label={__("API Key")}
               value={apiKey}
-              onChange={(val: string) => setAttributes({ apiKey: val })}
-            />
-            <RangeControl
-              label={__("Zoom")}
-              value={zoom}
-              min={1}
-              max={20}
-              onChange={(val: number) => {
-                setAttributes({ zoom: val });
-                this.zoom();
+              onChange={(val: string) => {
+                setAttributes({ apiKey: val });
+                this.setComponentState({
+                  mapClient: createClient({ key: val })
+                });
               }}
             />
             <TextControl
@@ -222,11 +237,13 @@ class GoogleMapEdit extends Component {
               onChange={(val: string) => {
                 setAttributes({ address: val });
 
-                this.geocode(val, (resp, status) => {
-                  if (status == "OK") {
-                    const { lat, lng } = this.getCenterFromGeocoder(resp);
+                this.geocode({ address: val }, (error, resp) => {
+                  if (!error) {
+                    const { lat, lng } = this.getCenterFromGeocoder(
+                      resp.json.results
+                    );
                     setAttributes({ lat, lng });
-                    this.center();
+                    this.setComponentState({ lat, lng });
                   }
                 });
               }}
@@ -237,20 +254,87 @@ class GoogleMapEdit extends Component {
                   label={<small>{__("Latitude")}</small>}
                   value={lat}
                   onChange={(val: string) => {
-                    setAttributes({ lat: val });
-                    this.center();
+                    setAttributes({ lat: parseFloat(val) });
+                    this.setComponentState({ lat: parseFloat(val) });
                   }}
                 />
                 <TextControl
                   label={<small>{__("Longitude")}</small>}
                   value={lng}
                   onChange={(val: string) => {
-                    setAttributes({ lng: val });
-                    this.center();
+                    setAttributes({ lng: parseFloat(val) });
+                    this.setComponentState({ lng: parseFloat(val) });
                   }}
                 />
               </PanelRow>
             </BaseControl>
+            <RangeControl
+              label={__("Zoom")}
+              value={zoom}
+              min={1}
+              max={20}
+              onChange={(val: number) => {
+                setAttributes({ zoom: val });
+                this.setComponentState({ zoom: val });
+              }}
+            />
+            <ToggleControl
+              label={__("Fullscreen Control")}
+              checked={attributes.mapOptions.fullscreenControl}
+              onChange={(val: boolean) =>
+                this.setMapOptions({ fullscreenControl: val })
+              }
+            />
+            <ToggleControl
+              label={__("Map Type Control")}
+              checked={attributes.mapOptions.mapTypeControl}
+              onChange={(val: boolean) =>
+                this.setMapOptions({ mapTypeControl: val })
+              }
+            />
+            <ToggleControl
+              label={__("Street View Control")}
+              checked={attributes.mapOptions.streetViewControl}
+              onChange={(val: boolean) =>
+                this.setMapOptions({ streetViewControl: val })
+              }
+            />
+            <ToggleControl
+              label={__("Zoom Control")}
+              checked={attributes.mapOptions.zoomControl}
+              onChange={(val: boolean) =>
+                this.setMapOptions({ zoomControl: val })
+              }
+            />
+            <SelectControl
+              label={__("Map Type")}
+              value={attributes.mapOptions.mapTypeId}
+              onChange={(val: string) => this.setMapOptions({ mapTypeId: val })}
+              options={[
+                { value: "roadmap", label: "Road Map" },
+                { value: "satellite", label: "Satellite" }
+              ]}
+            />
+            <TextareaControl
+              label={__("Styles")}
+              help={
+                <p>
+                  Refer to{" "}
+                  <a
+                    href="https://snazzymaps.com/"
+                    ref="noopener noreferrer"
+                    target="_blank"
+                  >
+                    SnazzyMaps
+                  </a>{" "}
+                  for a library of styles.
+                </p>
+              }
+              value={JSON.stringify(attributes.mapOptions.styles)}
+              onChange={(val: string) =>
+                this.setMapOptions({ styles: JSON.parse(val) })
+              }
+            />
           </PanelBody>
           <PanelBody
             className="editor-panel-map-settings"
@@ -287,7 +371,9 @@ class GoogleMapEdit extends Component {
                 <TextControl
                   type="number"
                   value={minHeight}
-                  onChange={(val: string) => setAttributes({ minHeight: val })}
+                  onChange={(val: string) =>
+                    setAttributes({ minHeight: parseFloat(val) })
+                  }
                 />
                 <SelectControl
                   value={minHeightUnit}
@@ -319,7 +405,7 @@ class GoogleMapEdit extends Component {
               const { description, address, lat, lng } = marker;
 
               return (
-                <Fragment>
+                <Fragment key={index}>
                   <div style={{ textAlign: "right" }}>
                     <Button
                       isSmall
@@ -363,9 +449,11 @@ class GoogleMapEdit extends Component {
                         index
                       );
 
-                      this.geocode(val, (resp, status) => {
-                        if (status == "OK") {
-                          const { lat, lng } = this.getCenterFromGeocoder(resp);
+                      this.geocode({ address: val }, (error, resp) => {
+                        if (!error) {
+                          const { lat, lng } = this.getCenterFromGeocoder(
+                            resp.json.results
+                          );
 
                           this.updateMarker(
                             {
@@ -433,8 +521,14 @@ class GoogleMapEdit extends Component {
             label={__("Add API Key in block settings.")}
           />
         )}
-        {apiKey && (
-          <div className={className}>
+        {apiKey && (lat == 0 && lng == 0) && (
+          <Placeholder
+            icon={MapIcon}
+            label={__("Add location data in block settings.")}
+          />
+        )}
+        {apiKey && !(lat == 0 && lng == 0) && (
+          <div className={`${className} loganstellway-aspect-ratio-container`}>
             <div
               style={{
                 paddingTop: `${getRatio(x, y)}%`,
@@ -443,24 +537,24 @@ class GoogleMapEdit extends Component {
                   : undefined
               }}
             />
-            <div className="map-container">
+            <div className="loganstellway-aspect-ratio-content">
               <GoogleMapReact
                 bootstrapURLKeys={{ key: apiKey }}
-                defaultCenter={getCenter(attributes)}
-                defaultZoom={zoom}
-                onGoogleApiLoaded={this.setApi}
+                center={getCenter(this.state)}
+                zoom={this.state.zoom}
+                options={attributes.mapOptions}
               >
                 {markers.map(
-                  ({
-                    lat,
-                    lng,
-                    description
-                  }: {
-                    lat: number;
-                    lng: number;
-                    description?: string;
-                  }) => (
-                    <Marker lat={lat} lng={lng} description={description} />
+                  (
+                    { lat, lng, description }: MarkerInterface,
+                    index: number
+                  ) => (
+                    <Marker
+                      key={index}
+                      lat={lat}
+                      lng={lng}
+                      description={description || undefined}
+                    />
                   )
                 )}
               </GoogleMapReact>
