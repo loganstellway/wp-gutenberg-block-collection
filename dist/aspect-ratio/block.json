@@ -53,6 +53,10 @@
         "bgImage": {
             "type": "object",
             "default": {}
+        },
+        "bgPosition": {
+            "type": "string",
+            "default": "50% 50%"
         }
     }
 }

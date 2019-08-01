@@ -28,9 +28,6 @@ var __assign = (this && this.__assign) || function () {
 import React from "react";
 import GoogleMapReact from "google-map-react";
 import { createClient } from "@google/maps";
-/**
- * WordPress dependencies
- */
 import { __ } from "@wordpress/i18n";
 import { Component, Fragment } from "@wordpress/element";
 import { InspectorControls } from "@wordpress/editor";
@@ -139,9 +136,8 @@ var GoogleMapEdit = /** @class */ (function (_super) {
     // Add marker
     GoogleMapEdit.prototype.addMarker = function () {
         var _a = this.props, attributes = _a.attributes, setAttributes = _a.setAttributes;
-        var markers = attributes.markers;
         setAttributes({
-            markers: [].concat(markers, [
+            markers: [].concat(attributes.markers, [
                 { lat: 0, lng: 0, description: "", address: "" }
             ])
         });
@@ -152,7 +148,7 @@ var GoogleMapEdit = /** @class */ (function (_super) {
         // Props
         var _a = this.props, attributes = _a.attributes, setAttributes = _a.setAttributes, className = _a.className;
         // Attributes
-        var apiKey = attributes.apiKey, address = attributes.address, zoom = attributes.zoom, x = attributes.x, y = attributes.y, minHeight = attributes.minHeight, addMinHeight = attributes.addMinHeight, minHeightUnit = attributes.minHeightUnit, lat = attributes.lat, lng = attributes.lng, markers = attributes.markers;
+        var apiKey = attributes.apiKey, address = attributes.address, zoom = attributes.zoom, x = attributes.x, y = attributes.y, minHeight = attributes.minHeight, addMinHeight = attributes.addMinHeight, minHeightUnit = attributes.minHeightUnit, lat = attributes.lat, lng = attributes.lng, markers = attributes.markers, mapOptions = attributes.mapOptions;
         // Edit
         return (React.createElement(Fragment, null,
             React.createElement(InspectorControls, null,
@@ -187,19 +183,19 @@ var GoogleMapEdit = /** @class */ (function (_super) {
                             setAttributes({ zoom: val });
                             _this.setComponentState({ zoom: val });
                         } }),
-                    React.createElement(ToggleControl, { label: __("Fullscreen Control"), checked: attributes.mapOptions.fullscreenControl, onChange: function (val) {
+                    React.createElement(ToggleControl, { label: __("Fullscreen Control"), checked: mapOptions.fullscreenControl, onChange: function (val) {
                             return _this.setMapOptions({ fullscreenControl: val });
                         } }),
-                    React.createElement(ToggleControl, { label: __("Map Type Control"), checked: attributes.mapOptions.mapTypeControl, onChange: function (val) {
+                    React.createElement(ToggleControl, { label: __("Map Type Control"), checked: mapOptions.mapTypeControl, onChange: function (val) {
                             return _this.setMapOptions({ mapTypeControl: val });
                         } }),
-                    React.createElement(ToggleControl, { label: __("Street View Control"), checked: attributes.mapOptions.streetViewControl, onChange: function (val) {
+                    React.createElement(ToggleControl, { label: __("Street View Control"), checked: mapOptions.streetViewControl, onChange: function (val) {
                             return _this.setMapOptions({ streetViewControl: val });
                         } }),
-                    React.createElement(ToggleControl, { label: __("Zoom Control"), checked: attributes.mapOptions.zoomControl, onChange: function (val) {
+                    React.createElement(ToggleControl, { label: __("Zoom Control"), checked: mapOptions.zoomControl, onChange: function (val) {
                             return _this.setMapOptions({ zoomControl: val });
                         } }),
-                    React.createElement(SelectControl, { label: __("Map Type"), value: attributes.mapOptions.mapTypeId, onChange: function (val) { return _this.setMapOptions({ mapTypeId: val }); }, options: [
+                    React.createElement(SelectControl, { label: __("Map Type"), value: mapOptions.mapTypeId, onChange: function (val) { return _this.setMapOptions({ mapTypeId: val }); }, options: [
                             { value: "roadmap", label: "Road Map" },
                             { value: "satellite", label: "Satellite" }
                         ] }),
@@ -208,7 +204,7 @@ var GoogleMapEdit = /** @class */ (function (_super) {
                             " ",
                             React.createElement("a", { href: "https://snazzymaps.com/", ref: "noopener noreferrer", target: "_blank" }, "SnazzyMaps"),
                             " ",
-                            "for a library of styles."), value: JSON.stringify(attributes.mapOptions.styles), onChange: function (val) {
+                            "for a library of styles."), value: JSON.stringify(mapOptions.styles), onChange: function (val) {
                             return _this.setMapOptions({ styles: JSON.parse(val) });
                         } })),
                 React.createElement(PanelBody, { className: "editor-panel-map-settings", title: __("Dimensions"), initialOpen: false },
@@ -303,7 +299,7 @@ var GoogleMapEdit = /** @class */ (function (_super) {
                             : undefined
                     } }),
                 React.createElement("div", { className: "loganstellway-aspect-ratio-content" },
-                    React.createElement(GoogleMapReact, { bootstrapURLKeys: { key: apiKey }, center: getCenter(this.state), zoom: this.state.zoom, options: attributes.mapOptions }, markers.map(function (_a, index) {
+                    React.createElement(GoogleMapReact, { bootstrapURLKeys: { key: apiKey }, center: getCenter(this.state), zoom: this.state.zoom, options: mapOptions }, markers.map(function (_a, index) {
                         var lat = _a.lat, lng = _a.lng, description = _a.description;
                         return (React.createElement(Marker, { key: index, lat: lat, lng: lng, description: description || undefined }));
                     })))))));

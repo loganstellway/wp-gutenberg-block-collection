@@ -34,11 +34,6 @@ module.exports = {
     rules: [
       ...defaultConfig.module.rules,
       {
-        test: /\.tsx?$/,
-        use: "ts-loader",
-        exclude: /node_modules/
-      },
-      {
         test: /\.scss$/,
         use: [
           {
@@ -59,15 +54,20 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.tsx?$/,
+        use: ["babel-loader", "ts-loader"],
+        exclude: /node_modules/
       }
     ]
   },
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM"
+  },
   resolve: {
     extensions: [".tsx", ".ts", ".js"]
-  },
-  output: {
-    ...defaultConfig.output,
-    path: __dirname + "/dist/"
   },
   plugins: [
     ...defaultConfig.plugins,

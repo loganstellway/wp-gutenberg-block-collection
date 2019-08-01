@@ -7,25 +7,21 @@ import React from "react";
  * WordPress dependencies
  */
 import { Component } from "@wordpress/element";
-import { BlockSaveProps } from "@wordpress/blocks";
 import { InnerBlocks } from "@wordpress/editor";
 
 /**
  * Internal dependencies
  */
+import { SaveProps } from "../types";
 import { getRGBColor } from "../utils";
 import { getRatio, AspectRatioAttributes } from "./utils";
-
-interface Props extends BlockSaveProps<AspectRatioAttributes> {
-  className: string;
-}
 
 /**
  * Save
  */
 class AspectRatioSave extends Component {
   // Props
-  props: Props;
+  props: SaveProps<AspectRatioAttributes>;
 
   // Render
   render() {

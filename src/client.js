@@ -2,6 +2,7 @@
  * External dependencies
  */
 import GoogleMapReact from "google-map-react";
+import { StyleSheet, css } from "aphrodite";
 
 /**
  * WordPress dependencies
@@ -79,6 +80,23 @@ import { getCenter, Marker } from "./blocks/google-map/utils";
         map.parentNode.replaceChild(el, map);
         ReactDOM.render(content, el);
       }
+    }
+  );
+
+  // Google Map
+  [].forEach.call(
+    document.querySelectorAll("[data-loganstellway-styles]"),
+    el => {
+      try {
+        const styles = JSON.parse(el.getAttribute("data-loganstellway-styles"));
+        const sheet = StyleSheet.create({
+          main: styles
+        });
+
+        let classes = el.className.split(" ");
+        classes.push(css(sheet.main));
+        el.className = classes.join(" ");
+      } catch (e) {}
     }
   );
 })();

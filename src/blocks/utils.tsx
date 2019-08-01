@@ -16,24 +16,9 @@ import { Fragment } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 
 /**
- * Color interface
+ * Internal dependencies
  */
-export interface ColorInterface {
-  hex: string;
-  hsl: string;
-  hsv: string;
-  rgb: string;
-}
-
-/**
- * Media object
- */
-export interface MediaObject {
-  id?: number;
-  url?: string;
-  media_type?: string;
-  type?: string;
-}
+import { MediaObject, ColorInterface, BackgroundAttributes } from "./types";
 
 /**
  * Normalize media upload selection
@@ -68,44 +53,6 @@ export const getRGBColor = (val: Partial<ColorInterface>) => {
   );
   return color.toRgbString();
 };
-
-/**
- * Justify content
- */
-export type JustifyContent =
-  | "center"
-  | "start"
-  | "end"
-  | "normal"
-  | "flex-start"
-  | "flex-end";
-
-/**
- * Align items
- */
-export type AlignItems =
-  | "center"
-  | "start"
-  | "end"
-  | "normal"
-  | "flex-start"
-  | "flex-end";
-
-/**
- * Background settings interface
- */
-export interface BackgroundAttributes {
-  addBgColor: boolean;
-  bgColor: Partial<ColorInterface>;
-  addMaskColor: boolean;
-  maskColor: Partial<ColorInterface>;
-  bgImage: {
-    url?: string;
-    id?: number;
-    type?: string;
-  };
-  bgPosition: string;
-}
 
 /**
  * Background settings panel

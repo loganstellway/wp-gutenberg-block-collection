@@ -7,23 +7,19 @@ import React from "react";
  * WordPress dependencies
  */
 import { Component } from "@wordpress/element";
-import { BlockSaveProps } from "@wordpress/blocks";
 
 /**
  * Internal dependencies
  */
+import { SaveProps } from "../types";
 import { GoogleMapsAttributes } from "./utils";
-
-interface Props extends BlockSaveProps<GoogleMapsAttributes> {
-  className: string;
-}
 
 /**
  * Save
  */
 export default class GoogleMapSave extends Component {
   // Props
-  props: Props;
+  props: SaveProps<GoogleMapsAttributes>;
 
   // Render
   render() {

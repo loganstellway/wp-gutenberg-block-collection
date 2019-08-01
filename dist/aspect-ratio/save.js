@@ -20,9 +20,6 @@ import React from "react";
  */
 import { Component } from "@wordpress/element";
 import { InnerBlocks } from "@wordpress/editor";
-/**
- * Internal dependencies
- */
 import { getRGBColor } from "../utils";
 import { getRatio } from "./utils";
 /**
@@ -38,19 +35,20 @@ var AspectRatioSave = /** @class */ (function (_super) {
         // Props
         var _a = this.props, attributes = _a.attributes, className = _a.className;
         // Attributes
-        var x = attributes.x, y = attributes.y, minHeight = attributes.minHeight, addMinHeight = attributes.addMinHeight, minHeightUnit = attributes.minHeightUnit, justifyContent = attributes.justifyContent, alignItems = attributes.alignItems, addBgColor = attributes.addBgColor, bgColor = attributes.bgColor, addMaskColor = attributes.addMaskColor, maskColor = attributes.maskColor;
-        return (React.createElement("div", { className: className + " loganstellway-aspect-ratio-container", style: {
-                backgroundColor: addBgColor ? getRGBColor(bgColor) : undefined
+        var x = attributes.x, y = attributes.y, minHeight = attributes.minHeight, addMinHeight = attributes.addMinHeight, minHeightUnit = attributes.minHeightUnit, justifyContent = attributes.justifyContent, alignItems = attributes.alignItems, addBgColor = attributes.addBgColor, bgColor = attributes.bgColor, addMaskColor = attributes.addMaskColor, maskColor = attributes.maskColor, bgImage = attributes.bgImage, bgPosition = attributes.bgPosition;
+        return (React.createElement("div", { className: className + " loganstellway-aspect-ratio-container loganstellway-block-bg-image", style: {
+                backgroundColor: addBgColor ? getRGBColor(bgColor) : undefined,
+                backgroundImage: bgImage.url ? "url(" + bgImage.url + ")" : undefined,
+                backgroundPosition: bgPosition
             } },
             React.createElement("div", { style: {
                     paddingTop: getRatio(x, y) + "%",
                     minHeight: addMinHeight ? "" + minHeight + minHeightUnit : undefined
                 } }),
             addMaskColor && (React.createElement("div", { className: "loganstellway-aspect-ratio-mask", style: {
-                    backgroundColor: getRGBColor(addMaskColor ? maskColor : undefined)
+                    backgroundColor: addMaskColor ? getRGBColor(maskColor) : undefined
                 } })),
-            React.createElement("div", { className: "loganstellway-aspect-ratio-content", style: {
-                    display: "flex",
+            React.createElement("div", { className: "loganstellway-aspect-ratio-content loganstellway-block-flex-align", style: {
                     justifyContent: justifyContent,
                     alignItems: alignItems
                 } },

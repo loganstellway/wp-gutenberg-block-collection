@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { BackgroundAttributes, JustifyContent, AlignItems } from "../utils";
+import { BackgroundAttributes, JustifyContent, AlignItems } from "../types";
 
 /**
  * Get ratio

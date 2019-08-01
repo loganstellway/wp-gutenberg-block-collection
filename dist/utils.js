@@ -2,7 +2,7 @@
  * External dependencies
  */
 import tinycolor from "tinycolor2";
-import { PanelBody, BaseControl, ToggleControl, ColorPicker, Button, ButtonGroup } from "@wordpress/components";
+import { PanelBody, BaseControl, ToggleControl, ColorPicker, Button, ButtonGroup, SelectControl } from "@wordpress/components";
 import { MediaUpload, MediaUploadCheck } from "@wordpress/editor";
 import { Fragment } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
@@ -35,7 +35,7 @@ export var getRGBColor = function (val) {
  * Background settings panel
  */
 export var bgSettingsPanel = function (attributes, setAttributes) {
-    var bgImage = attributes.bgImage, addBgColor = attributes.addBgColor, bgColor = attributes.bgColor, addMaskColor = attributes.addMaskColor, maskColor = attributes.maskColor;
+    var bgImage = attributes.bgImage, bgPosition = attributes.bgPosition, addBgColor = attributes.addBgColor, bgColor = attributes.bgColor, addMaskColor = attributes.addMaskColor, maskColor = attributes.maskColor;
     return (React.createElement(PanelBody, { className: "editor-panel-background-settings", title: __("Background"), initialOpen: false },
         React.createElement(BaseControl, { id: "loganstellway-aspect-ratio-bg-image", label: __("Background Image") },
             React.createElement(MediaUploadCheck, { fallback: React.createElement("p", null, __("To edit the background image, you need permission to upload media.")) },
@@ -53,6 +53,17 @@ export var bgSettingsPanel = function (attributes, setAttributes) {
                                     React.createElement(Button, { isDefault: true, onClick: function () { return setAttributes({ bgImage: {} }); } }, __("Remove")),
                                     React.createElement(Button, { isPrimary: true, onClick: open }, __("Change")))))));
                     } }))),
+        bgImage.url && (React.createElement(SelectControl, { label: __("Background Position"), value: bgPosition, onChange: function (val) { return setAttributes({ bgPosition: val }); }, options: [
+                { value: "0 0", label: "Top Left" },
+                { value: "50% 0", label: "Top Center" },
+                { value: "100% 0", label: "Top Right" },
+                { value: "0 50%", label: "Middle Left" },
+                { value: "50% 50%", label: "Middle Center" },
+                { value: "100% 50%", label: "Middle Right" },
+                { value: "0 100%", label: "Bottom Left" },
+                { value: "50% 100%", label: "Bottom Center" },
+                { value: "100% 100%", label: "Bottom Right" }
+            ] })),
         React.createElement(ToggleControl, { label: __("Add Background Color?"), checked: addBgColor, onChange: function (val) {
                 setAttributes({ addBgColor: val });
             } }),

@@ -1,0 +1,23 @@
+.loganstellway {
+  &-content-wrapper {
+    margin: 0 auto;
+    position: relative;
+
+    &.rendered {
+      display: none;
+    }
+
+    &-mask {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+
+    &-content {
+      z-index: 1;
+      position: relative;
+    }
+  }
+}

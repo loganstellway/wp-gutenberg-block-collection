@@ -1,0 +1,59 @@
+{
+  "name": "loganstellway/content-wrapper",
+  "category": "layout",
+  "attributes": {
+    "addBgColor": {
+      "type": "boolean",
+      "default": false
+    },
+    "bgColor": {
+      "type": "object",
+      "default": {
+        "hex": "transparent"
+      }
+    },
+    "addMaskColor": {
+      "type": "boolean",
+      "default": false
+    },
+    "maskColor": {
+      "type": "object",
+      "default": {
+        "hex": "transparent"
+      }
+    },
+    "bgImage": {
+      "type": "object",
+      "default": {}
+    },
+    "bgPosition": {
+      "type": "string",
+      "default": "50% 50%"
+    },
+    "breakpoints": {
+      "type": "array",
+      "default": [
+        {
+          "direction": "min-width",
+          "breakpoint": 576,
+          "width": 540
+        },
+        {
+          "direction": "min-width",
+          "breakpoint": 768,
+          "width": 720
+        },
+        {
+          "direction": "min-width",
+          "breakpoint": 992,
+          "width": 960
+        },
+        {
+          "direction": "min-width",
+          "breakpoint": 1200,
+          "width": 1140
+        }
+      ]
+    }
+  }
+}

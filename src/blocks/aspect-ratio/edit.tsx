@@ -2,11 +2,11 @@
  * External dependencies
  */
 import React from "react";
-import { BlockEditProps } from "@wordpress/blocks";
 
 /**
  * WordPress dependencies
  */
+import { BlockEditProps } from "@wordpress/blocks";
 import { __ } from "@wordpress/i18n";
 import { Component, Fragment } from "@wordpress/element";
 import { InspectorControls, InnerBlocks } from "@wordpress/editor";
@@ -22,12 +22,8 @@ import {
 /**
  * Internal dependencies
  */
-import {
-  getRGBColor,
-  JustifyContent,
-  AlignItems,
-  bgSettingsPanel
-} from "../utils";
+import { JustifyContent, AlignItems } from "../types";
+import { getRGBColor, bgSettingsPanel } from "../utils";
 import { getRatio, AspectRatioAttributes } from "./utils";
 
 /**

@@ -2,12 +2,7 @@
  * External dependencies
  */
 import React from "react";
-import GoogleMapReact, {
-  MapOptions,
-  Coords,
-  MapTypeStyle
-} from "google-map-react";
-import { BlockEditProps } from "@wordpress/blocks";
+import GoogleMapReact, { MapOptions, Coords } from "google-map-react";
 import {
   GoogleMapsClient,
   createClient,
@@ -20,6 +15,7 @@ import {
 /**
  * WordPress dependencies
  */
+import { BlockEditProps } from "@wordpress/blocks";
 import { __ } from "@wordpress/i18n";
 import { Component, Fragment } from "@wordpress/element";
 import { InspectorControls } from "@wordpress/editor";
@@ -184,9 +180,8 @@ class GoogleMapEdit extends Component {
   // Add marker
   addMarker() {
     const { attributes, setAttributes } = this.props;
-    const { markers } = attributes;
     setAttributes({
-      markers: [].concat(markers, [
+      markers: [].concat(attributes.markers, [
         { lat: 0, lng: 0, description: "", address: "" }
       ])
     });
@@ -209,7 +204,8 @@ class GoogleMapEdit extends Component {
       minHeightUnit,
       lat,
       lng,
-      markers
+      markers,
+      mapOptions
     } = attributes;
 
     // Edit
@@ -280,35 +276,35 @@ class GoogleMapEdit extends Component {
             />
             <ToggleControl
               label={__("Fullscreen Control")}
-              checked={attributes.mapOptions.fullscreenControl}
+              checked={mapOptions.fullscreenControl}
               onChange={(val: boolean) =>
                 this.setMapOptions({ fullscreenControl: val })
               }
             />
             <ToggleControl
               label={__("Map Type Control")}
-              checked={attributes.mapOptions.mapTypeControl}
+              checked={mapOptions.mapTypeControl}
               onChange={(val: boolean) =>
                 this.setMapOptions({ mapTypeControl: val })
               }
             />
             <ToggleControl
               label={__("Street View Control")}
-              checked={attributes.mapOptions.streetViewControl}
+              checked={mapOptions.streetViewControl}
               onChange={(val: boolean) =>
                 this.setMapOptions({ streetViewControl: val })
               }
             />
             <ToggleControl
               label={__("Zoom Control")}
-              checked={attributes.mapOptions.zoomControl}
+              checked={mapOptions.zoomControl}
               onChange={(val: boolean) =>
                 this.setMapOptions({ zoomControl: val })
               }
             />
             <SelectControl
               label={__("Map Type")}
-              value={attributes.mapOptions.mapTypeId}
+              value={mapOptions.mapTypeId}
               onChange={(val: string) => this.setMapOptions({ mapTypeId: val })}
               options={[
                 { value: "roadmap", label: "Road Map" },
@@ -330,7 +326,7 @@ class GoogleMapEdit extends Component {
                   for a library of styles.
                 </p>
               }
-              value={JSON.stringify(attributes.mapOptions.styles)}
+              value={JSON.stringify(mapOptions.styles)}
               onChange={(val: string) =>
                 this.setMapOptions({ styles: JSON.parse(val) })
               }
@@ -542,7 +538,7 @@ class GoogleMapEdit extends Component {
                 bootstrapURLKeys={{ key: apiKey }}
                 center={getCenter(this.state)}
                 zoom={this.state.zoom}
-                options={attributes.mapOptions}
+                options={mapOptions}
               >
                 {markers.map(
                   (

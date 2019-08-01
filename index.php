@@ -32,17 +32,17 @@ if ( ! class_exists('\LoganStellway\Gutenberg\Blocks') ) {
              */
             wp_register_script(
                 'loganstellway-gutenberg-blocks-editor',
-                plugins_url( 'dist/editor.js', __FILE__ ),
+                plugins_url( 'build/editor.js', __FILE__ ),
                 array( 'wp-editor', 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components' ),
-                filemtime( plugin_dir_path( __FILE__ ) . 'dist/editor.js' ),
+                filemtime( plugin_dir_path( __FILE__ ) . 'build/editor.js' ),
                 true
             );
 
             wp_register_style(
                 'loganstellway-gutenberg-blocks-editor',
-                plugins_url( 'dist/editor-styles.css', __FILE__ ),
+                plugins_url( 'build/editor-styles.css', __FILE__ ),
                 array( 'wp-edit-blocks' ),
-                filemtime( plugin_dir_path( __FILE__ ) . 'dist/editor-styles.css' )
+                filemtime( plugin_dir_path( __FILE__ ) . 'build/editor-styles.css' )
             );
         
             /**
@@ -50,17 +50,17 @@ if ( ! class_exists('\LoganStellway\Gutenberg\Blocks') ) {
              */
             wp_register_script(
                 'loganstellway-gutenberg-blocks-client',
-                plugins_url( 'dist/client.js', __FILE__ ),
+                plugins_url( 'build/client.js', __FILE__ ),
                 array('wp-element'),
-                filemtime( plugin_dir_path( __FILE__ ) . 'dist/client.js' ),
+                filemtime( plugin_dir_path( __FILE__ ) . 'build/client.js' ),
                 true
             );
 
             wp_register_style(
                 'loganstellway-gutenberg-blocks-client',
-                plugins_url( 'dist/client-styles.css', __FILE__ ),
+                plugins_url( 'build/client-styles.css', __FILE__ ),
                 array( 'wp-edit-blocks' ),
-                filemtime( plugin_dir_path( __FILE__ ) . 'dist/client-styles.css' )
+                filemtime( plugin_dir_path( __FILE__ ) . 'build/client-styles.css' )
             );
 
             $this->registerBlocks();

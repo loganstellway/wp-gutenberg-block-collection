@@ -15,16 +15,10 @@ var __extends = (this && this.__extends) || (function () {
  * External dependencies
  */
 import React from "react";
-/**
- * WordPress dependencies
- */
 import { __ } from "@wordpress/i18n";
 import { Component, Fragment } from "@wordpress/element";
 import { InspectorControls, InnerBlocks } from "@wordpress/editor";
 import { PanelBody, PanelRow, BaseControl, TextControl, ToggleControl, SelectControl } from "@wordpress/components";
-/**
- * Internal dependencies
- */
 import { getRGBColor, bgSettingsPanel } from "../utils";
 import { getRatio } from "./utils";
 /**
@@ -40,7 +34,7 @@ var AspectRatioEdit = /** @class */ (function (_super) {
         // Props
         var _a = this.props, attributes = _a.attributes, setAttributes = _a.setAttributes, className = _a.className;
         // Attributes
-        var x = attributes.x, y = attributes.y, minHeight = attributes.minHeight, addMinHeight = attributes.addMinHeight, minHeightUnit = attributes.minHeightUnit, justifyContent = attributes.justifyContent, alignItems = attributes.alignItems, addBgColor = attributes.addBgColor, bgColor = attributes.bgColor, addMaskColor = attributes.addMaskColor, maskColor = attributes.maskColor, bgImage = attributes.bgImage;
+        var x = attributes.x, y = attributes.y, minHeight = attributes.minHeight, addMinHeight = attributes.addMinHeight, minHeightUnit = attributes.minHeightUnit, justifyContent = attributes.justifyContent, alignItems = attributes.alignItems, addBgColor = attributes.addBgColor, bgColor = attributes.bgColor, addMaskColor = attributes.addMaskColor, maskColor = attributes.maskColor, bgImage = attributes.bgImage, bgPosition = attributes.bgPosition;
         // Edit
         return (React.createElement(Fragment, null,
             React.createElement(InspectorControls, null,
@@ -73,7 +67,7 @@ var AspectRatioEdit = /** @class */ (function (_super) {
                                 { value: "vw", label: "vw" }
                             ] })))),
                 React.createElement(PanelBody, { className: "editor-panel-content-settings", title: __("Content"), initialOpen: false },
-                    React.createElement(SelectControl, { label: __("Horizontal Align"), value: justifyContent, onChange: function (val) {
+                    React.createElement(SelectControl, { label: __("Vertical Align"), value: justifyContent, onChange: function (val) {
                             return setAttributes({ justifyContent: val });
                         }, options: [
                             { value: "normal", label: "Normal" },
@@ -81,16 +75,17 @@ var AspectRatioEdit = /** @class */ (function (_super) {
                             { value: "center", label: "Center" },
                             { value: "flex-end", label: "End" }
                         ] }),
-                    React.createElement(SelectControl, { label: __("Vertical Align"), value: alignItems, onChange: function (val) { return setAttributes({ alignItems: val }); }, options: [
+                    React.createElement(SelectControl, { label: __("Horizontal Align"), value: alignItems, onChange: function (val) { return setAttributes({ alignItems: val }); }, options: [
                             { value: "normal", label: "Normal" },
-                            { value: "flex-start", label: "Top" },
-                            { value: "center", label: "Middle" },
-                            { value: "flex-end", label: "Bottom" }
+                            { value: "flex-start", label: "Start" },
+                            { value: "center", label: "Center" },
+                            { value: "flex-end", label: "End" }
                         ] })),
                 bgSettingsPanel(attributes, setAttributes)),
-            React.createElement("div", { className: className + " loganstellway-aspect-ratio-container", style: {
-                    backgroundColor: getRGBColor(bgColor),
-                    backgroundImage: bgImage.url ? "url(" + bgImage.url + ")" : null
+            React.createElement("div", { className: className + " loganstellway-aspect-ratio-container loganstellway-block-bg-image", style: {
+                    backgroundColor: addBgColor ? getRGBColor(bgColor) : undefined,
+                    backgroundImage: bgImage.url ? "url(" + bgImage.url + ")" : undefined,
+                    backgroundPosition: bgPosition
                 } },
                 React.createElement("div", { style: {
                         paddingTop: getRatio(x, y) + "%",
@@ -99,10 +94,9 @@ var AspectRatioEdit = /** @class */ (function (_super) {
                             : undefined
                     } }),
                 addMaskColor && (React.createElement("div", { className: "loganstellway-aspect-ratio-mask", style: {
-                        backgroundColor: getRGBColor(addMaskColor ? maskColor : undefined)
+                        backgroundColor: getRGBColor(maskColor)
                     } })),
-                React.createElement("div", { className: "loganstellway-aspect-ratio-content", style: {
-                        display: "flex",
+                React.createElement("div", { className: "loganstellway-aspect-ratio-content loganstellway-block-flex-align", style: {
                         justifyContent: justifyContent,
                         alignItems: alignItems
                     } },
