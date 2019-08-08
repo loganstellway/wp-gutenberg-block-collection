@@ -1,7 +1,7 @@
 {
-  "name": "loganstellway-wp-gutenberg-bootstrap-blocks",
+  "name": "loganstellway-wp-gutenberg-block-collection",
   "version": "1.0.0",
-  "description": "Bootstrap blocks for Gutenberg",
+  "description": "Blocks for Gutenberg",
   "main": "src/index.js",
   "scripts": {
     "build": "NODE_ENV=development wp-scripts build",
@@ -13,7 +13,6 @@
   },
   "keywords": [
     "gutenberg",
-    "bootstrap",
     "blocks"
   ],
   "author": "Logan Stellway",

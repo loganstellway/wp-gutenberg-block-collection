@@ -1,17 +1,18 @@
 {
-    "name": "loganstellway/wp-gutenberg-google-map",
-    "type": "wordpress-plugin",
-    "license": "MIT",
-    "description": "Google map blocks for WordPress editor Gutenberg",
-    "homepage": "https://github.com/loganstellway/wp-gutenberg-google-map/",
-    "keywords": [
-        "wordpress", "gutenberg", "google", "map"
-    ],
-    "support": {
-        "issues": "https://github.com/loganstellway/wp-gutenberg-google-map/issues"
-    },
-    "require": {
-        "php": ">=5.4.0",
-        "composer/installers": "~1.0"
-    }
+  "name": "loganstellway/wp-gutenberg-block-collection",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "description": "Blocks for WordPress editor Gutenberg",
+  "homepage": "https://github.com/loganstellway/wp-gutenberg-block-collection/",
+  "keywords": [
+    "wordpress",
+    "gutenberg"
+  ],
+  "support": {
+    "issues": "https://github.com/loganstellway/wp-gutenberg-block-collection/issues"
+  },
+  "require": {
+    "php": ">=5.4.0",
+    "composer/installers": "~1.0"
+  }
 }
