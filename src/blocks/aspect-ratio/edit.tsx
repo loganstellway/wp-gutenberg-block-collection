@@ -159,14 +159,14 @@ class AspectRatioEdit extends Component {
             backgroundPosition: bgPosition
           }}
         >
-          <div
+          {/* <div
             style={{
               paddingTop: `${getRatio(x, y)}%`,
               minHeight: addMinHeight
                 ? `${minHeight}${minHeightUnit}`
                 : undefined
             }}
-          />
+          /> */}
           {addMaskColor && (
             <div
               className="loganstellway-aspect-ratio-mask"
@@ -176,7 +176,7 @@ class AspectRatioEdit extends Component {
             />
           )}
           <div
-            className="loganstellway-aspect-ratio-content loganstellway-block-flex-align"
+            className="loganstellway-block-flex-align"
             style={{
               justifyContent: justifyContent,
               alignItems: alignItems
